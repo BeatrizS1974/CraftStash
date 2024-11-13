@@ -1,10 +1,15 @@
 // Sample JSON object acting as a mock database
 const dataRecords = [
-    { id: 1, dataElement1: 'Distress Oxide- Spun Sugar', dataElement2: 'Ranger', dataElement3: 'D3' },
-    { id: 2, dataElement1: 'Distress Oxide - Mowed Lawn', dataElement2: 'Ranger', dataElement3: 'D3' },
-    { id: 3, dataElement1: 'Creative FX- Holographic', dataElement2: 'American Crafts', dataElement3: 'D8' },
-    { id: 4, dataElement1: 'Embossing Folder- Jolly', dataElement2: 'Tonic Studios', dataElement3: 'C3' },
-    { id: 5, dataElement1: 'Distress Mica Stain- Decayed', dataElement2: 'Ranger', dataElement3: 'W1' }
+    { id: 1, dataElement1: 'Distress Oxide', dataElement2: 'Spun Sugar', dataElement3: 'Ranger',
+         dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1' },
+    { id: 2, dataElement1: 'Distress Oxide ', dataElement2: 'Mowed Lawn', dataElement3: 'Ranger', 
+        dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1'},
+    { id: 3, dataElement1: 'Creative FX', dataElement2: 'Holographic', dataElement3: 'American Crafts',
+         dataElement4: 'Mixed Media',dataElement5: 'K2', dataElement6: '1' }, 
+    { id: 4, dataElement1: 'Embossing Folder- Jolly', dataElement2: 'N/A', dataElement3: 'Catherine Pooler',
+         dataElement4: 'embossing folder', dataElement5: 'A4', dataElement6: '1'},
+    { id: 5, dataElement1: 'Distress Mica Stain', dataElement2: 'Decayed', dataElement3: 'Ranger',
+         dataElement4: 'Mixed Media', dataElement5: 'W1', dataElement6: '1' }
 ];
 
 // Function to populate the table on page load
@@ -20,19 +25,27 @@ function populateTable() {
         const dataElement1Cell = document.createElement('td');
         const dataElement2Cell = document.createElement('td');
         const dataElement3Cell = document.createElement('td');
+        const dataElement4Cell = document.createElement('td');
+        const dataElement5Cell = document.createElement('td');
+        const dataElement6Cell = document.createElement('td');
 
         // Populate the cells with data
         idCell.textContent = record.id;
         dataElement1Cell.textContent = record.dataElement1;
         dataElement2Cell.textContent = record.dataElement2;
         dataElement3Cell.textContent = record.dataElement3;
+        dataElement4Cell.textContent = record.dataElement4;
+        dataElement5Cell.textContent = record.dataElement5;
+        dataElement6Cell.textContent = record.dataElement6;
 
         // Append cells to the row
         row.appendChild(idCell);
         row.appendChild(dataElement1Cell);
         row.appendChild(dataElement2Cell);
         row.appendChild(dataElement3Cell);
-
+        row.appendChild(dataElement4Cell);
+        row.appendChild(dataElement5Cell);
+        row.appendChild(dataElement6Cell);
         // Append row to the table body
         tableBody.appendChild(row);
     });

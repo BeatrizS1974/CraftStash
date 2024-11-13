@@ -30,7 +30,7 @@ nav {
     width: 120%; 
     background-color: #000000; 
     padding: 4px 0; 
-    position: absolute;
+    position: justify center;
     bottom: 0; 
     left: 0;
 }

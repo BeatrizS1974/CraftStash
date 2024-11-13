@@ -17,7 +17,7 @@ body {
 
 
 header {
-    background-image: url("../images/TheCraftStash.png");
+    background-image: url("/Client/images/TheCraftStash.png");
     background-size: contain; 
     background-position: center;
     height: 150px; 
