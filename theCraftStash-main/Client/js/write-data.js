@@ -23,7 +23,7 @@ document.getElementById("submitBtn").addEventListener("click", function() {
     $.ajax({
         url: indexURL + "/write-record",
         type: "post",
-        data: jSON.stringify(jsonString),
+        data: jsonString,
         success: function(response){
             var data = JSON.parse(response);
             if(data.msg === "SUCCESS" ){

@@ -1,16 +1,38 @@
 // Sample JSON object acting as a mock database
-const dataRecords = [
-    { id: 1, dataElement1: 'Distress Oxide', dataElement2: 'Spun Sugar', dataElement3: 'Ranger',
-         dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1' },
-    { id: 2, dataElement1: 'Distress Oxide ', dataElement2: 'Mowed Lawn', dataElement3: 'Ranger', 
-        dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1'},
-    { id: 3, dataElement1: 'Creative FX', dataElement2: 'Holographic', dataElement3: 'American Crafts',
-         dataElement4: 'Mixed Media',dataElement5: 'K2', dataElement6: '1' }, 
-    { id: 4, dataElement1: 'Embossing Folder- Jolly', dataElement2: 'N/A', dataElement3: 'Catherine Pooler',
-         dataElement4: 'embossing folder', dataElement5: 'A4', dataElement6: '1'},
-    { id: 5, dataElement1: 'Distress Mica Stain', dataElement2: 'Decayed', dataElement3: 'Ranger',
-         dataElement4: 'Mixed Media', dataElement5: 'W1', dataElement6: '1' }
-];
+// //const dataRecords = [
+//     { id: 1, dataElement1: 'Distress Oxide', dataElement2: 'Spun Sugar', dataElement3: 'Ranger',
+//          dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1' },
+//     { id: 2, dataElement1: 'Distress Oxide ', dataElement2: 'Mowed Lawn', dataElement3: 'Ranger', 
+//         dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1'},
+//     { id: 3, dataElement1: 'Creative FX', dataElement2: 'Holographic', dataElement3: 'American Crafts',
+//          dataElement4: 'Mixed Media',dataElement5: 'K2', dataElement6: '1' }, 
+//     { id: 4, dataElement1: 'Embossing Folder- Jolly', dataElement2: 'N/A', dataElement3: 'Catherine Pooler',
+//          dataElement4: 'embossing folder', dataElement5: 'A4', dataElement6: '1'},
+//     { id: 5, dataElement1: 'Distress Mica Stain', dataElement2: 'Decayed', dataElement3: 'Ranger',
+//          dataElement4: 'Mixed Media', dataElement5: 'W1', dataElement6: '1' }
+// ];
+
+retrieveData();
+
+function retrieveData(){
+    $.ajax({
+        url:indexURL + "/get-records",
+        type: "get",
+        success: function(response){
+            var Librarydata= JSON.parse(response);
+
+            if(data.msg = "SUCCESS"){
+                    createLibraryTable(data.fileData);
+
+            }else {
+                console.log(data.msg)
+            }
+        },
+        error: function(err){
+            console.log(err);
+        }
+    });
+}
 
 // Function to populate the table on page load
 function populateTable() {

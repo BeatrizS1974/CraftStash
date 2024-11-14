@@ -37,6 +37,23 @@ var services = function(app) {
     }
 
 });
+
+app.get("/get-records", function(req, res){
+    if(fs.existsSync(DB_FILE)){
+        fs.readFile(DB_FILE, "utf8", function(err, data){
+            if(err){
+                res.send(json.stringify({msg: err}));
+            }else {
+                var libraryData = JSON.parse(data);
+                res.send(JSON.stringify({msg: "SUCCESS", fileData: libraryData}));
+            
+            }
+        });
+    } else {
+        data = [];
+        res.send(JSON.stringify({msg: "SUCCESS", fileData: data}));
+    }
+});
 }else{
     libraryData.push(data);
     fs.writeFile(DB_FILE, JSON.stringify(libraryData), function(err){
