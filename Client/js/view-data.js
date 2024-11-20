@@ -12,20 +12,17 @@
 //          dataElement4: 'Mixed Media', dataElement5: 'W1', dataElement6: '1' }
 // ];
 
-retrieveData();
 
 function retrieveData(){
     $.ajax({
-        url:indexURL + "/get-records",
-        type: "get",
+        url: indexURL + "/view-data",
+        type: "GET",
+        dataType: "json",  
         success: function(response){
-            var data= JSON.parse(response);
-
-            if(data.msg == "SUCCESS"){
-                    populateTable(data.fileData);
-
-            }else {
-                console.log(data.msg)
+            if(response.msg === "SUCCESS"){
+                populateTable(response.fileData);
+            } else {
+                console.log(response.msg);
             }
         },
         error: function(err){
@@ -39,7 +36,7 @@ function populateTable(dataRecords) {
     const tableBody = document.querySelector("#dataTable tbody");
 
     // Loop through the JSON data and create rows
-    dataRecords.forEach(record => {
+    dataRecords.forEach(record); {
         const row = document.createElement('tr');
 
         // Create table data cells for each field
@@ -70,7 +67,7 @@ function populateTable(dataRecords) {
         row.appendChild(dataElement6Cell);
         // Append row to the table body
         tableBody.appendChild(row);
-    });
+    }
 }
 
 
