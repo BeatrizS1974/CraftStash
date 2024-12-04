@@ -1,1 +1,0 @@
-var indexURL = 'http://localhost:5050';
