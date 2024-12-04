@@ -1,0 +1,100 @@
+/* General styles for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+
+/* Header styles */
+
+header {
+    background-image: url("../images/TheCraftStash.png");
+    background-size: contain; 
+    background-position: center;
+    height: 150px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:0;
+    position: relative;
+    color: black; 
+}
+nav {
+    width: 120%; 
+    background-color: #000000; 
+    padding: 2px 0; 
+    position: absolute;
+    bottom: 0; 
+    left: 0;
+}
+
+.nav-buttons {
+    list-style: none;
+    display: flex; 
+    justify-content: center;
+    gap: 15px; 
+    padding: 0; 
+    margin: 0; 
+}
+
+.nav-buttons li {
+    display: inline;
+}
+
+.nav-buttons a {
+    display: inline-block; 
+    padding: 5px 10px; 
+    background-color: rgba(70, 244, 160, 0.8); 
+    color: white; 
+    text-decoration: none; 
+    border-radius: 3px; 
+    transition: background-color 0.3s ease; 
+}
+
+.nav-buttons a:hover {
+    background-color: rgba(51, 193, 255, 0.8); 
+}
+
+/* Main content styles */
+main {
+    flex: 1; 
+    padding: 100px;
+    text-align: center;
+}
+
+/* Form styles */
+form {
+    margin: 0 auto;
+    width: 800px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+}
+
+/* Button styles */
+button {
+    padding: 10px 20px;
+    margin-right: 10px;
+}
+
+/* Footer styles */
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: relative; 
+}
+}
