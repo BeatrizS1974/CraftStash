@@ -1,73 +1,43 @@
-// Sample JSON object acting as a mock database
-// //const dataRecords = [
-//     { id: 1, dataElement1: 'Distress Oxide', dataElement2: 'Spun Sugar', dataElement3: 'Ranger',
-//          dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1' },
-//     { id: 2, dataElement1: 'Distress Oxide ', dataElement2: 'Mowed Lawn', dataElement3: 'Ranger', 
-//         dataElement4: 'Ink Pad', dataElement5: 'K1', dataElement6: '1'},
-//     { id: 3, dataElement1: 'Creative FX', dataElement2: 'Holographic', dataElement3: 'American Crafts',
-//          dataElement4: 'Mixed Media',dataElement5: 'K2', dataElement6: '1' }, 
-//     { id: 4, dataElement1: 'Embossing Folder- Jolly', dataElement2: 'N/A', dataElement3: 'Catherine Pooler',
-//          dataElement4: 'embossing folder', dataElement5: 'A4', dataElement6: '1'},
-//     { id: 5, dataElement1: 'Distress Mica Stain', dataElement2: 'Decayed', dataElement3: 'Ranger',
-//          dataElement4: 'Mixed Media', dataElement5: 'W1', dataElement6: '1' }
-// ];
+var products= [];
+var activeProducts = 0;
 
 
-function retrieveData(){
-    $.ajax({
-        url: indexURL + "/view-data",
-        type: "GET",
-        dataType: "json",  
-        success: function(response){
-            if(response.msg === "SUCCESS"){
-                populateTable(response.fileData);
-            } else {
-                console.log(response.msg);
+var app = angular.module('browseProductsApp',[]);
+
+app.controller('browseProductsCtrl', function($scope, $http) {
+
+    $scope.get_records = function() {
+        $http({
+            //send request to the server
+            method:'get',
+            url: indexURL + "/view-data"
+
+        }).then(function(response){
+            
+            //if successfully connected to the server
+            if(response.data.msg === "SUCCESS"){
+                spells = response.data.products;
+                $scope.obj = spells[activeProducts];
+                $scope.showHide;
+            
+            }else {
+                console.log(response.data.msg);
+
             }
-        },
-        error: function(err){
-            console.log(err);
+        }), function(error) {
+            console.log(error);
         }
-    });
-}
-
-// Function to populate the table on page load
-function populateTable(dataRecords) {
-    const tableBody = document.querySelector("#dataTable tbody");
-
-    // Loop through the JSON data and create rows
-    dataRecords.forEach(record); {
-        const row = document.createElement('tr');
-
-        // Create table data cells for each field
-        const idCell = document.createElement('td');
-        const dataElement1Cell = document.createElement('td');
-        const dataElement2Cell = document.createElement('td');
-        const dataElement3Cell = document.createElement('td');
-        const dataElement4Cell = document.createElement('td');
-        const dataElement5Cell = document.createElement('td');
-        const dataElement6Cell = document.createElement('td');
-
-        // Populate the cells with data
-        idCell.textContent = record.id;
-        dataElement1Cell.textContent = record.dataElement1;
-        dataElement2Cell.textContent = record.dataElement2;
-        dataElement3Cell.textContent = record.dataElement3;
-        dataElement4Cell.textContent = record.dataElement4;
-        dataElement5Cell.textContent = record.dataElement5;
-        dataElement6Cell.textContent = record.dataElement6;
-
-        // Append cells to the row
-        row.appendChild(idCell);
-        row.appendChild(dataElement1Cell);
-        row.appendChild(dataElement2Cell);
-        row.appendChild(dataElement3Cell);
-        row.appendChild(dataElement4Cell);
-        row.appendChild(dataElement5Cell);
-        row.appendChild(dataElement6Cell);
-        // Append row to the table body
-        tableBody.appendChild(row);
     }
+    $scope.get_records();
+
+    $scope.changeProducts = function(direction){
+        activeProducts += direction;
+        $scope.obj = products[activeProducts];
+        $scope.showHide;
+    }
+$scope.showHide = function() {
+    $scope.hidePrev = (activeProducts == 0);
+    $scope.hideNext = (activeProducts == products.length-1);
 }
 
-
+});// End of Controller
