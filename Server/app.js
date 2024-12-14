@@ -1,28 +1,27 @@
 const express = require('express');
-const path = require('path');
+const app = express();
 const bodyParser = require('body-parser');
 
-const app = express();
+var cors = require('cors');
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use("/client", express.static(path.resolve(__dirname + "/../client/")));
+
+var server;
+var port = process.env.PORT || process.env.NODE_PORT || 5000
 
 //Page listeners(router)
-var router = require('./router.js');
-router(app);
+var services = require('./services.js');
+services.services(app);
+services.initializeDatabase();
 
 
 // Service Listeners(data processes)
-var services = require('./services.js');
-services(app);
-var port = 5000;
+server = app.listen(port,function(err){
+    if(err){
+        throw err;
+    }
+    console.log("listening on port " + port);
+});
 
-//Listen
-
-var server = app.listen(port, function(err){
-    if(err) throw err;
-
-    console.log("listening on port: " + port);
-
-})

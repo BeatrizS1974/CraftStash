@@ -1,81 +1,115 @@
-const fs = require('fs');
-const path = require('path');
+const csProducts = require('craft-stash-products');
+const{MongoClient, ObjectId } =require('mongodb');
 
-const DB_FILE = path.join(__dirname + '/files/data.txt');
-
+const dbUrl = process.env.BD_URI || "mongodb: //127.0.0.1";
+const client = new MongoClient(dbUrl);
 
 var services = function(app) { 
-    app.post('/write_record', function(req, res){
+
+    app.post('/write_record', async function(req, res){
         
-        var id = "lib" + Date.now();
-        console.log("dog")
-        var Data = {
+        var newProduct = {
             id: id,
-            dataElement1: req.body.ProductDescription,
-            dataElement2: req.body.Color,
-            dataElement3: req.body.Manufacturer,
-            dataElement4: req.body.ProductType,
-            dataElement5: req.body.Location,
-            dataElement6: req.body.Quantity
+            name: req.body.ProductDescription,
+            color: req.body.Color,
+            manufacturer: req.body.Manufacturer,
+            type: req.body.ProductType,
+            location: req.body.Location,
+            quantity: req.body.Quantity
             
         };
-        console.log(JSON.stringify(Data))
+       var search = {name: req.body.name};
 
-        
-        var libraryData = [];
+       try{
+        const conn = await client.connect();
+        const db = conn.db("products");
+        const coll = db.collection("stash");
 
-        if(fs.existsSync(DB_FILE)){
-            //read in current database
-            fs.readFile(DB_FILE, "utf8", function(err,data){
-                if(err) {
-                    res.send(JSON.stringify({msg: err}));
-                }else{
-                    libraryData = JSON.parse(data);
+     const product = await coll.find(search).toArray();
 
-                    libraryData.push(Data);
-
-                    fs.writeFile(DB_FILE, JSON.stringify(libraryData), function(err){
-                        if(err) {
-                            res.send(JSON.stringify({msg: err}));
-                        }else {
-                            res.send(JSON.stringify({msg: "SUCCESS"}));
-                        }
-                    });   
-                } 
-            });
+        if(product.length > 0) {
+            await conn.close();
+            return res.send(JSON.stringify({msg: "Product Already Exists"}));
         }else{
-            libraryData.push(Data);
-
-            fs.writeFile(DB_FILE, JSON.stringify(libraryData), function(err){
-                if(err) {
-                    console.log(err)
-                    res.send(JSON.stringify({msg: err}));
-                }else {
-                    res.send(JSON.stringify({msg: "SUCCESS"}));
-                }
-            });      
+            await coll.insertOne(newProduct);
+            await conn.close();
+            return res.send(JSON.stringify({msg: "SUCCESS"}));
         }
-
+       }catch (error){
+            await conn.close();
+            return res.send(JSON.stringify({msg: "Error" + error}));
+       }
     });
+    app.get("/get-productByType", async function(req, res) {
+        const search = req.query.type ? { type: req.query.type } : {};
 
-    app.get("/get-records", function(req, res){
-        if(fs.existsSync(DB_FILE)){
-            fs.readFile(DB_FILE, "utf8", function(err, data){
-                if(err){
-                    res.send(JSON.stringify({msg: err}));
-                }else {
-                    var libraryData = JSON.parse(data);
-                    res.send(JSON.stringify({msg: "SUCCESS", fileData: libraryData}));
-                
-                }
-            });
-        } else {
-            data = [];
-            res.send(JSON.stringify({msg: "SUCCESS", fileData: data}));
-        }
-    });
+    try{
+        const conn = await client.connect();
+        const db = conn.db("products");
+        const coll = db.collection("stash");
+
+        const data = await coll.find(search).toArray();
+        await conn.close();
+        return res.send(JSON.stringify({msg: "SUCCESS", products: data }))
+
+    } catch(error) {
+    await conn.close();
+    return res.send(JSON.stringify({msg: "Error" + error}));  
+} 
+});
+
+app.put('/update-product', async function(req, res) {
+    
+
+});
+
+app.delete('/delete-product', async function(req, res) {
+    
+});
+
+//For refreshing the products table
+app.post('/refreshProduct', async function(req, res) {
+// console.log("In refresh products");
+try {
+    const conn = await client.connect();
+    const db = conn.db("products");
+    const coll = db.collection('stash');
+    
+    await coll.drop();
+    console.log("Dropped database");
+    await client.close();
+    initializeDatabase();
+    return res.status(200).send(JSON.stringify({msg:"SUCCESS"}));        
+} catch(err) {
+    console.log(err);
+    return res.status(200).send(JSON.stringify({msg:"Error: " + err}));
+}
+
+});
 
 }
 
-module.exports = services;
+//To Initialize the products table
+var initializeDatabase = async function() {
+
+try {
+    const conn = await client.connect();
+    const db = conn.db("products");
+    const coll = db.collection('stash');
+    const data = await coll.find().toArray();
+
+    if(data.length === 0) {
+        var products = csProducts.all;
+        await coll.insertMany(products);
+        console.log("Added seed records");
+    }
+
+    await conn.close();
+} catch(err) {
+    console.log(err);
+}
+
+}
+
+module.exports = { services, initializeDatabase };
 
